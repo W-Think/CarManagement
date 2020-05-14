@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑汽车</title>
+    <div  th:include="common.html"></div>
+    <script type="text/javascript">
+        /**
+         * 公共的数据拼接 option
+         */
+        function appendCity(data){
+            if(data!=null && data.length>0){
+                var append="<option>请选择</option>";
+                for (var i=0;i<data.length;i++){
+                    append+="<option value='"+data[i].id+"'>"+data[i].cityname+"</option>";
+                }
+                return append;
+            }
+        }
+        //查询所有的省级别的数据  第一次进页面的时候，
+        // 先加载所有的省的数据
+        var url = '/city/queryByPid?pid=1';
+        $.getJSON(url,function (data) {
+            $("#provinceId").append(appendCity(data));//把数据赋值到市的下拉框中
+        });
+
+        $(function () {
+            //当用户选择一个省的下拉数据的时候，则去查询当前省下面的市的所有数据
+            $("#provinceId").change(function () {
+                //当重新选择省的下拉数据的时候，清空市 和区的下拉框中的数据
+                $("#cityId").html("");
+                $("#areaId").html("");
+                //获取省id
+                var provinceId = $("#provinceId").val();
+                var url = '/city/queryByPid?pid='+provinceId;
+                $.getJSON(url,function (data) {
+                    $("#cityId").append(appendCity(data));
+                })
+            });
+            $("#cityId").change(function () {
+                //当重新选择省的下拉数据的时候，清空市 和区的下拉框中的数据
+                $("#areaId").html("");
+                //获取省id
+                var cityId = $("#cityId").val();
+                var url = '/city/queryByPid?pid='+cityId;
+                $.getJSON(url,function (data) {
+                    $("#areaId").append(appendCity(data));
+                })
+            });
+            //拼接省市区的信息
+            $("#areaId").change(function () {
+                //先把地址栏上的数据情况
+                $("#addressId").val("");
+                //获取省的选中的下拉框的数据
+                var provinceName = $("#provinceId option:selected").text();
+                var cityName = $("#cityId option:selected").text();
+                var areaName = $("#areaId option:selected").text();
+                $("#addressId").val(provinceName+"-"+cityName+"-"+areaName+"");
+            });
+
+
+            $("#rebate").change(function () {
+                var rebateValue=$("#rebate").val();
+                var carPriceValue=$("#carPrice").val();
+                alert(rebateValue+"----"+carPriceValue);
+                alert("值:"+carPriceValue*(100-rebateValue)/100)
+                $("#ActualPriceId").val(carPriceValue*(100-rebateValue)/100);
+            });
+
+
+
+            $("#rebate").blur(function () {
+                var discont = $(this).val();
+                alert("值是:"+discont);
+                if(discont.search("%")!=-1){
+                    discont = discont.replace("%","");
+                    if(discont>=15){
+                        alert("折扣不可大于15%");
+                        $("#add").attr("disabled",true);
+                    }else{
+                        $("#add").attr("disabled",false);
+                    }
+                }else{
+                    if(discont>=15){
+                        alert("折扣不可大于15%");
+                        $("#add").attr("disabled",true);
+                    }else{
+                        $("#add").attr("disabled",false);
+                    }
+                }
+
+            });
+            $.post(
+                "/bmw/queryCarTypeByPId",
+                {carPid:0},
+                function (obj) {
+                    var op="<option value='0'>--请选择品牌--</option>";
+                    for (var i=0;i<obj.length;i++){
+                        alert("长度:"+obj.length+"-----pid:"+obj[i].carPid);
+                        alert("1号:"+obj[i].id);
+                        if (obj[i].id==$("#id1").val()){
+                            op+="<option selected='selected' value='"+obj[i].id+"'>"+obj[i].carTypeName+"</option>";
+                        }else {
+                            op+="<option value='"+obj[i].id+"'>"+obj[i].carTypeName+"</option>";
+                        }
+                    }
+                    var op2="<option value='0'>--请选择车系--</option>";
+                    $("#carPid").append(op2);
+                    //$("#id").html("");
+                    $("#id").append(op);
+                },"json"
+            );
+            // $.post(
+            //     "findTypes",
+            //     {carPid:$("#id1").val()},
+            //     function (obj) {
+            //         var op2="<option value='0'>--请选择车系--</option>";
+            //         for (var i=0;i<obj.length;i++){
+            //             alert("2号:"+$("#carPid1").val());
+            //             if ($("#carPid1").val()==obj[i].id){
+            //                 alert("8888888888");
+            //                 op2+="<option selected='selected' value='"+obj[i].id+"'>"+obj[i].carTypeName+"</option>";
+            //             }else {
+            //                 op2+="<option value='"+obj[i].id+"'>"+obj[i].carTypeName+"</option>";
+            //             }
+            //         }
+            //         // $("#carPid").empty();
+            //         $("#carPid").html("");
+            //         $("#carPid").append(op2);
+            //     },"json"
+            // );
+            $("#id").change(function () {
+                alert($(this).val());
+                $.post(
+                    "/bmw/queryCarTypesByPId",
+                    {carPid:$(this).val()},
+                    function (obj) {
+                        var op2="<option value='0'>--请选择车系--</option>";
+                        for (var i=0;i<obj.length;i++){
+                            op2+="<option value='"+obj[i].id+"'>"+obj[i].carTypeName+"</option>";
+                        }
+                        $("#carPid").empty();
+                        $("#carPid").append(op2);
+                    },"json"
+                );
+            })
+        });
+        KindEditor.ready(function(K) {
+            window.editor = K.create('#editor_id');
+        });
+    </script>
+</head>
+<body class="container">
+    <form th:action="@{/bmw/addCar}" method="post" autocomplete="off">
+<!--        <input type="hidden" name="id" th:value="${tbCar.id}">-->
+<!--        <input type="hidden" name="id" id="id1" th:value="${tbCarType.id}">-->
+<!--        <input type="hidden" name="carPid" id="carPid1" th:value="${tbCarType.carPid}">-->
+
+        地区:<select type="text" id="provinceId"></select>
+        <select type="text" id="cityId"></select>
+        <select type="text" id="areaId"></select><br>
+        厂家：<input type="text" name="carName" id="addressId" th:value="${tbCar.carName}"><br>
+        颜色：<input type="text" name="carColor" th:value="${tbCar.carColor}"><br>
+        车系：
+        <select name="id" id="id" th:value="${tbCar.carTypeId1}"></select>
+        <select name="carPid" id="carPid" th:value="${tbCar.carTypeId2}"></select><br/>
+        销售价格：<input type="text" name="carPrice" id="carPrice" th:value="${tbCar.carPrice}"><br>
+        折价比：<input type="number" name="rebate" id="rebate" th:value="${tbCar.rebate}">%<br>
+        实际价格：<input type="text" name="ActualPrice" id="ActualPriceId" disabled="disabled">%<br>
+        <input type="submit" value="上传" id="add" class="btn btn-success">
+        <span th:text="${msg}"></span>
+    </form>
+</body>
+</html>

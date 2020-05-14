@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>展示</title>
+    <div th:include="common.html"></div>
+    <script>
+        $(function () {
+            $("#toAdd").click(function () {
+                window.location.href="toAdd";
+            });
+            $("#checkAll").click(function () {
+                $("input[type='checkbox']").each(function () {
+                    this.checked = !this.checked;
+                })
+            })
+            $("#delmore").click(function () {
+                var ids="";
+                $(".ck:checked").each(function () {
+                    ids+=","+$(this).val();
+                })
+                ids=ids.substring(1);
+                if(ids==""){
+                    alert("请选择")
+                    // alert(ids);
+                }else {
+                    var sure = window.confirm("确定要删除("+ids+")这些车系吗？");
+                    if (!sure) {
+                        return;
+                    }else {
+                        $.post(
+                            "delmore",
+                            {ids:ids},
+                            function (flag) {
+                                if(flag>0){
+                                    alert("删除成功!")
+                                    location.reload()
+                                }else{
+                                    alert("删除失败!")
+                                }
+                            },"text"
+                        )
+                    }
+                }
+            });
+        })
+        // 注销
+        $(function () {
+            $("#removeSessionToLogin").click(function () {
+                window.location.href="/user/removeSessionToLogin" ;
+            })
+        })
+    </script>
+</head>
+<body>
+    <div>
+        <button id="removeSessionToLogin" class="btn-default">注销</button>
+        <button class="btn-info" id="toAdd">添加</button>
+        <a href="/cartype/toShow">生成柱状图</a>
+        <form enctype="multipart/form-data" method="post" th:action="@{/bmw/excelImport}">
+            选择Excel表格：<input type="file" name="file"/>
+            <input type="submit" value="上传表格"/>
+        </form>
+        <a href="/bmw/excelExport">导出表格</a>
+    </div>
+    <form th:action="@{/bmw/queryCarList}" method="get">
+        出厂时间:<input type="text" name="startTime" class="datetimepicker" autocomplete="off"> - <input type="text" name="endTime" class="datetimepicker" autocomplete="off">
+        车系名称:<input type="text" name="carNewName">
+        <button type="submit" class="btn-success">查询</button>
+    </form>
+    <table border="2" class="table-bordered">
+        <thead>
+        <th>
+            <input type="checkbox" id="checkAll" class="btn-success"></input>
+            <button class="btn-danger" id="delmore">批量删除</button>
+        </th>
+        <th>编号</th>
+        <th>生产商</th>
+        <th>出厂时间</th>
+        <th>漆色</th>
+        <th>车系</th>
+        <th>销售价格</th>
+        <th>折价比</th>
+        <th>实际价格</th>
+        <th>操作</th>
+        </thead>
+        <tbody>
+        <tr th:each="car:${tbCarVoList}">
+            <td><input type="checkbox" th:value="${car.id}" class="ck"/></td>
+            <td th:text="${carStat.count}"></td>
+            <td th:text="${car.carName}"></td>
+            <td th:text="${#dates.format(car.carNewTime,'yyyy-MM-dd')}"></td>
+            <td th:text="${car.carColor}"></td>
+            <td th:text="${car.carNewName}"></td>
+            <td th:text="${car.carPrice}"></td>
+            <td th:text="${car.rebate}+'%' "></td>
+            <td th:text="${car.ActualPrice}"></td>
+            <td>
+                <button class="btn-success"><a th:href="@{/bmw/toAdd(id=${car.id})}">编辑</a></button>
+                <button class="btn-danger"><a th:href="@{/bmw/delete(id=${car.id})}">删除</a></button>
+            </td>
+        </tr>
+        </tbody>
+        <tr class="text-center">
+            <td colspan="11">
+                <div th:replace="Pages2::html"></div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
+    <script src="../static/js/front.js"></script>
+    <script src="../static/js/jquery-1.9.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="../static/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="../static/echers-dist/dist/echarts.min.js"></script>
+    <script src="../static/js/echartsUtls.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        $(function () {
+            $('.datetimepicker').datetimepicker({
+                language: "zh-CN",//配置中文
+                autoclose: true,//自动关闭
+                format: "yyyy-mm-dd"//日期显示格式
+            });
+        })
+</script>
+</body>
+</html>

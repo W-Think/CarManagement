@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wthink.car_producer2.dao.TbCarMapper" >
+  <resultMap id="BaseResultMap" type="com.wthink.car_producer2.pojo.TbCar" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="car_name" property="carName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="car_color" property="carColor" jdbcType="VARCHAR" />
+    <result column="car_type_id1" property="carTypeId1" jdbcType="INTEGER" />
+    <result column="car_type_id2" property="carTypeId2" jdbcType="INTEGER" />
+    <result column="car_price" property="carPrice" jdbcType="DECIMAL" />
+    <result column="rebate" property="rebate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, car_name, create_time, car_color, car_type_id1, car_type_id2, car_price, rebate
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wthink.car_producer2.pojo.TbCarExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_car
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_car
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wthink.car_producer2.pojo.TbCarExample" >
+    delete from tb_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wthink.car_producer2.pojo.TbCar" >
+    insert into tb_car (id, car_name, create_time, 
+      car_color, car_type_id1, car_type_id2, 
+      car_price, rebate)
+    values (#{id,jdbcType=VARCHAR}, #{carName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{carColor,jdbcType=VARCHAR}, #{carTypeId1,jdbcType=INTEGER}, #{carTypeId2,jdbcType=INTEGER}, 
+      #{carPrice,jdbcType=DECIMAL}, #{rebate,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wthink.car_producer2.pojo.TbCar" >
+    insert into tb_car
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carName != null" >
+        car_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="carColor != null" >
+        car_color,
+      </if>
+      <if test="carTypeId1 != null" >
+        car_type_id1,
+      </if>
+      <if test="carTypeId2 != null" >
+        car_type_id2,
+      </if>
+      <if test="carPrice != null" >
+        car_price,
+      </if>
+      <if test="rebate != null" >
+        rebate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carName != null" >
+        #{carName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="carColor != null" >
+        #{carColor,jdbcType=VARCHAR},
+      </if>
+      <if test="carTypeId1 != null" >
+        #{carTypeId1,jdbcType=INTEGER},
+      </if>
+      <if test="carTypeId2 != null" >
+        #{carTypeId2,jdbcType=INTEGER},
+      </if>
+      <if test="carPrice != null" >
+        #{carPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="rebate != null" >
+        #{rebate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wthink.car_producer2.pojo.TbCarExample" resultType="java.lang.Integer" >
+    select count(*) from tb_car
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tb_car
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carName != null" >
+        car_name = #{record.carName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.carColor != null" >
+        car_color = #{record.carColor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.carTypeId1 != null" >
+        car_type_id1 = #{record.carTypeId1,jdbcType=INTEGER},
+      </if>
+      <if test="record.carTypeId2 != null" >
+        car_type_id2 = #{record.carTypeId2,jdbcType=INTEGER},
+      </if>
+      <if test="record.carPrice != null" >
+        car_price = #{record.carPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rebate != null" >
+        rebate = #{record.rebate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tb_car
+    set id = #{record.id,jdbcType=VARCHAR},
+      car_name = #{record.carName,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      car_color = #{record.carColor,jdbcType=VARCHAR},
+      car_type_id1 = #{record.carTypeId1,jdbcType=INTEGER},
+      car_type_id2 = #{record.carTypeId2,jdbcType=INTEGER},
+      car_price = #{record.carPrice,jdbcType=DECIMAL},
+      rebate = #{record.rebate,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wthink.car_producer2.pojo.TbCar" >
+    update tb_car
+    <set >
+      <if test="carName != null" >
+        car_name = #{carName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="carColor != null" >
+        car_color = #{carColor,jdbcType=VARCHAR},
+      </if>
+      <if test="carTypeId1 != null" >
+        car_type_id1 = #{carTypeId1,jdbcType=INTEGER},
+      </if>
+      <if test="carTypeId2 != null" >
+        car_type_id2 = #{carTypeId2,jdbcType=INTEGER},
+      </if>
+      <if test="carPrice != null" >
+        car_price = #{carPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="rebate != null" >
+        rebate = #{rebate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wthink.car_producer2.pojo.TbCar" >
+    update tb_car
+    set car_name = #{carName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      car_color = #{carColor,jdbcType=VARCHAR},
+      car_type_id1 = #{carTypeId1,jdbcType=INTEGER},
+      car_type_id2 = #{carTypeId2,jdbcType=INTEGER},
+      car_price = #{carPrice,jdbcType=DECIMAL},
+      rebate = #{rebate,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <resultMap id="BaseResultMapVo" type="com.wthink.car_producer2.vo.TbCarVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="car_name" property="carName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CarNewTime" property="CarNewTime" jdbcType="TIMESTAMP" />
+    <result column="car_color" property="carColor" jdbcType="VARCHAR" />
+    <result column="car_type_id1" property="carTypeId1" jdbcType="INTEGER" />
+    <result column="car_type_id2" property="carTypeId2" jdbcType="INTEGER" />
+    <result column="CarNewName" property="CarNewName" jdbcType="VARCHAR" />
+    <result column="car_price" property="carPrice" jdbcType="DECIMAL" />
+    <result column="rebate" property="rebate" jdbcType="VARCHAR" />
+    <result column="ActualPrice" property="ActualPrice" jdbcType="DECIMAL" />
+  </resultMap>
+
+
+  <select id="queryCarList" resultMap="BaseResultMapVo" resultType="com.wthink.car_producer2.vo.TbCarVo">
+    SELECT *FROM
+    (SELECT tc.id,tc.car_name,tc.car_type_id1,tc.car_type_id2,tc.create_time as CarNewTime,tc.car_color,
+    concat(tct.car_type_name,'-',tcc.car_type_name) as CarNewName,
+    tc.car_price,tc.rebate ,((tc.car_price*(100-tc.rebate)/100)) as ActualPrice FROM tb_car tc
+    JOIN tb_car_type tct on tc.car_type_id1=tct.id
+    JOIN tb_car_type tcc on tc.car_type_id2=tcc.id) CC
+    WHERE 1=1
+    <if test="CarNewName!=null and CarNewName!='' ">
+      and CC.CarNewName like concat(concat('%',#{CarNewName}),'%')
+    </if>
+    <if test="startTime!=null and endTime !=null">
+      and CC.CarNewTime between #{startTime}  and  #{endTime}
+    </if>
+  </select>
+
+    <delete id="delmore" parameterType="java.lang.String">
+        delete from tb_car where id in (${ids})
+  </delete>
+
+<!--  <delete id="delmore" parameterType="int" >-->
+<!--    delete from tb_car where 1>2 or id in-->
+<!--    <foreach collection="array" item="ids" open="(" separator="," close=")">-->
+<!--        #{ids}-->
+<!--    </foreach>-->
+<!--  </delete>-->
+</mapper>
