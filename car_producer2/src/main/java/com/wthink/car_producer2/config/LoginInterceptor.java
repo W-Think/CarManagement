@@ -1,7 +1,7 @@
 package com.wthink.car_producer2.config;
 
 import com.wthink.car_producer2.pojo.TbCarUser;
-import com.wthink.car_producer2.until.StaticFlag;
+import com.wthink.car_producer2.utils.StaticFlag;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

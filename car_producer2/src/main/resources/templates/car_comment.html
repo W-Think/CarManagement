@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>列表</title>
+    <div th:include="common.html"></div>
+</head>
+<script>
+    function getById(id) {
+        $("#parentid").val(id);
+        $("#content").val("")
+        $("#nickname").val("")
+    }
+</script>
+<body>
+<table border="2" class="table-bordered">
+    <thead>
+    <th>序号</th>
+    <th>内容</th>
+    <th>发布时间</th>
+    <th>用户id</th>
+    <th>昵称</th>
+    <th>访问量</th>
+    <th>点赞数</th>
+    <th>分享数</th>
+    <th>评论数</th>
+    <th>状态</th>
+    <th>父id</th>
+    <th>操作</th>
+    </thead>
+    <tbody>
+    <tr th:each="list:${spitList}">
+        <th th:text="${listStat.count}"></th>
+        <th th:text="${list.content}"></th>
+        <th th:text="${#dates.format(list.publishtime,'yyyy-MM-dd HH:mm:ss')}"></th>
+        <th th:text="${list.userid}"></th>
+        <th th:text="${list.nickname}"></th>
+        <th th:text="${list.visits}"></th>
+        <th th:text="${list.thumbup}"></th>
+        <th th:text="${list.share}"></th>
+        <th th:text="${list.comment}"></th>
+        <th th:text="${list.state}"></th>
+        <th th:text="${list.parentid}"></th>
+        <th>
+            <button class="btn-success"><a th:href="@{/comm/thumbup(_id=${list._id})}">点赞</a></button>
+            <span> <button class="btn-danger" th:onclick="getById([[${list._id}]])" data-toggle="modal" data-target="#myModal">借阅记录</button></span>
+        </th>
+    </tr>
+    </tbody>
+</table>
+</body>
+<!--模态框-->
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    评论
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form action="/comm/add" method="post">
+                    <input type="hidden" id="parentid" name="parentid">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>
+                                昵称：
+                            </th>
+                            <th>
+                                <input type="text" id="nickname" name="nickname">
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tr>
+                            <th>
+                                内容：
+                            </th>
+                            <th>
+                                <input type="text" id="content" name="content">
+                            </th>
+                        </tr>
+                    </table>
+                    <button type="submit" class="btn btn-success">
+                        提交
+                    </button>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</html>

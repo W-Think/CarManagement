@@ -10,7 +10,7 @@ import com.wthink.car_producer2.pojo.TbCar;
 import com.wthink.car_producer2.pojo.TbCarType;
 import com.wthink.car_producer2.service.TbCarTypeService;
 import com.wthink.car_producer2.service.TbcarService;
-import com.wthink.car_producer2.until.StaticFlag;
+import com.wthink.car_producer2.utils.StaticFlag;
 import com.wthink.car_producer2.vo.TbCarVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,9 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @描述:

@@ -30,6 +30,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         list.add("/user/checkPwdAndUserName"); //请求的地址（登录的校验）
         list.add("/user/checkPhone"); //请求的地址（登录的校验）
         list.add("/user/toRegister"); //注册成功
+        list.add("/user/sendPhone"); //验证码
+        list.add("/user/checkCodePhone"); //验证码
         list.add("/user/registerToUser"); //注册成功
         list.add("/bmw/toAdd"); //注册成功
 
